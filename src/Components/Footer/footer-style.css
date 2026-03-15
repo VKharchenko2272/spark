@@ -1,0 +1,12 @@
+.footer {
+    background: gitrgb(54, 111, 186);
+}
+
+.footer a {
+    text-decoration: none;
+    color: #adb5bd; /* Цвет ссылок */
+}
+
+.footer a:hover {
+    color: #ffffff; /* Цвет при наведении */
+}

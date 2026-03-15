@@ -1,0 +1,49 @@
+.login-title {
+    font-size: 50px;
+    font-weight: 500;
+    margin-bottom: 20px;
+    /* Adjust the spacing to place Login title higher */
+    color: #333;
+}
+
+.login-input-field{
+    width: 20%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 16px;
+}
+
+.login-buttom {
+    width: 20%;
+    padding: 10px;
+    margin-top: 10px;
+    /* Adjusted margin for spacing */
+    background-color: #007aff;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.login-buttom:hover {
+    background-color: #0056b3;
+}
+
+.login-wrapper{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 90%;  
+    width: 100%;
+}
+
+/* 
+ .header,  .footer , .search-bar {
+    display: none;
+} 
+ */

@@ -1,0 +1,46 @@
+header {
+    text-align: center;
+    gap: 1rem
+}
+
+.main-header {
+    height: 100px;
+    padding-top: 10px;
+}
+
+.logo-wrapper {
+    /* float: left;
+    margin-left: 10%; */
+    align-items: center;
+
+}
+
+.header-logout-element {
+    float: right;
+    margin-right: 7%;
+    display: flex;
+    align-items: center;
+}
+
+.header-info{
+    margin-right: 2%;
+}
+
+.logo-icon {
+    width: 50px;
+}
+.header-info {
+    display: flex;
+    align-items: center; /* Центрируем текст и изображение по вертикали */
+}
+
+.header-info img {
+    margin-right: 30px; /* Отступ между изображением и именем */
+    margin-left: 20px;
+}
+
+.name-block{
+    margin: 0;
+    margin-right: 10%;
+    font-size: 25px;
+}

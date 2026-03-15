@@ -1,0 +1,44 @@
+/* Home.css */
+
+.chart {
+    width: 100%; /* Ensure charts take up full width within the column */
+  }
+  
+  .container {
+    margin-top: 20px; /* Add some top margin to the container */
+  }
+  
+  h1 {
+    margin-bottom: 20px; /* Add some space below the title */
+  }
+
+  .custom-margin{
+    margin-top: 5%;
+  }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+  }
+  
+  .col-10 {
+    flex: 0 0 83.3333%;
+    max-width: 83.3333%;
+  }
+  
+  .col-2 {
+    flex: 0 0 16.6667%;
+    max-width: 16.6667%;
+  }
+
+  .data{
+      display: flex;
+      flex-direction: column;
+  }
+  
+  .no-data img {
+    align-self: center;
+    width: 500px;
+    height: 400px;
+  }

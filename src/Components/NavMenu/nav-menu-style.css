@@ -1,0 +1,72 @@
+.nav-menu{
+    width: 100%;
+    max-width: 250px;
+}
+
+.nav-menu > li{
+    display: flex; /* Enable flexbox */
+    padding: 0; /* Remove default padding */
+    margin: 0; /* Remove default margin */
+}
+
+.nav-element li {
+    display: flex;
+    /* Enable flexbox for list items */
+    align-items: center;
+    /* Vertically center items */
+    padding: 5px 10px 5px 15px;
+}
+
+.nav-element.active li {
+    color: #000;
+    background-color: rgba(128, 216, 244, 0.7);
+    border-radius: 0px 4px 4px 0px;
+}
+
+
+.nav-element:hover li {
+    font-weight: bold;
+    /* Background color on hover */
+    border-radius: 0px 4px 4px 0px;
+    /* Rounded corners for the highlight */
+}
+
+.nav-element-link-1{
+    padding-right: 88px;
+}
+
+.nav-element-link-2{
+    white-space: nowrap; /* Prevent text from wrapping to a new line */
+    text-decoration: none;
+}
+
+.nav-element-link-3{
+    padding-right: 83px;
+}
+
+.nav-element-icon {
+    width: 20px;
+    /* Adjust width as needed */
+    height: 20px;
+    /* Adjust height as needed */
+    margin-right: 10px;
+    /* Space between image and link */
+}
+.nav-element-link{
+    text-decoration: none; /* Remove underline from link */
+    color: #000; /* Set text color */
+    font-size: 16px; /* Adjust font size as needed */
+    display: flex;
+    align-items: center;
+}
+
+.nav-text{
+    text-decoration: none;
+}
+
+.custom-col-width {
+    width: 15%;
+    min-width: 150px; /* Optional: Add a min-width if needed */
+    margin-top: 4%;
+    padding: 0;
+  }

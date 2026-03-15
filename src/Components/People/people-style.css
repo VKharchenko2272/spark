@@ -1,0 +1,260 @@
+h1 {
+  font-weight: bold;
+  font-size: 34px;
+  text-align: center;
+}
+
+.people-container {
+  margin-top: 1%;
+  width: 100%;
+}
+
+.search {
+  display: none;
+}
+
+table {
+  width: 100%;
+}
+
+thead {
+  text-align: left;
+  font-weight: bold;
+}
+
+/* tbody{
+  align-items: center;
+  border-bottom: 1px solid;
+} */
+
+th {
+  text-align: center;
+  border-bottom: 1px solid;
+  padding: 10px;
+}
+
+.th-email {
+  text-align: center;
+}
+
+.th-action {
+  text-align: center;
+}
+
+td {
+  color: #6C757D;
+  padding: 10px;
+  border-bottom: 1px solid #6C757D;
+  text-align: center;
+}
+
+.td-email {
+  text-align: center;
+  color: black;
+}
+
+.th-status {
+  text-align: center;
+}
+
+.td-status-a {
+  color: white;
+  background-color: #5cc058;
+  padding: 5px 10px 5px 10px;
+  border-radius: 20px;
+  border-width: 0;
+  min-width: 90px;
+  max-width: 90px;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 25%);
+}
+
+.td-status-b {
+  color: white;
+  background-color: #DC3545;
+  padding: 5px 10px 5px 10px;
+  border-radius: 20px;
+  border-width: 0;
+  min-width: 90px;
+  max-width: 90px;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 25%);
+}
+
+.button-wrapper {
+  display: flex;
+  justify-content: space-between;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+
+.btn-danger {
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 25%);
+  border-radius: 10px;
+}
+
+.sort {
+  cursor: pointer;
+}
+
+.td-action-b {
+  text-align: center;
+}
+
+/*|||||||||||||||||||||||||||||||||||||Dropdown menu|||||||||||||||||||||||||||||||||||||||||||||||||||||||||*/
+
+.ellipsis-button {
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 0;
+}
+
+.ellipsis-container {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-menu-admin {
+  position: absolute;
+  bottom: 27px;
+  right: -9px;
+  background-color: white;
+  border-radius: 5%;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+  min-width: 100px;
+  text-align: left;
+  overflow: visible;
+}
+
+.dropdown-menu-admin::after {
+  content: "";
+  position: absolute;
+  bottom: -16px;
+  right: 0;
+  width: 0px;
+  height: 0px;
+  border: 1px solid #ccc;
+  border-style: solid;
+  border-width: 22px 18px 0 18px;
+  border-color: #ffffff transparent transparent transparent;
+  transform: rotate(0deg);
+  z-index: 900;
+  /* Keep this lower than the buttons */
+}
+
+.dropdown-menu-admin button {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 8px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: center;
+  position: relative;
+  /* Add relative positioning */
+  z-index: 1001;
+  /* Ensure buttons are above the arrow */
+}
+
+.dropdown-menu-admin img {
+  width: 25px;
+  padding-right: 5px;
+}
+
+.dropdown-menu-admin button:hover {
+  background-color: #d3d3d3;
+}
+
+.dropdown-menu-admin button:last-child:hover {
+  background-color: rgb(255, 0, 0, 0.72);
+  color: white;
+  /* Optional: change text color to white on hover */
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.dropdown-menu-manager {
+  position: absolute;
+  bottom: 27px;
+  right: -9px;
+  background-color: white;
+  border-radius: 5%;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+  min-width: 100px;
+  text-align: left;
+  overflow: visible;
+}
+
+.dropdown-menu-manager::after {
+  content: "";
+  position: absolute;
+  bottom: -16px;
+  right: 0;
+  width: 0px;
+  height: 0px;
+  border: 1px solid #ccc;
+  border-style: solid;
+  border-width: 22px 18px 0 18px;
+  border-color: #ffffff transparent transparent transparent;
+  transform: rotate(0deg);
+  z-index: 900;
+  /* Keep this lower than the buttons */
+}
+
+.dropdown-menu-manager button {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 8px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: center;
+  position: relative;
+  /* Add relative positioning */
+  z-index: 1001;
+  /* Ensure buttons are above the arrow */
+}
+
+.dropdown-menu-manager img {
+  width: 25px;
+  padding-right: 5px;
+}
+
+.dropdown-menu-manager button:hover {
+  background-color: #d3d3d3;
+}
+
+.img {
+  width: 50px;
+  /* Ширина картинки */
+  height: 50px;
+  /* Высота картинки */
+  border-radius: 50%;
+  /* Круглая форма изображения */
+}
+
+.edit-field {
+  width: 100%;
+  border-radius: 10px;
+  margin-top: 1%;
+  padding: 2%;
+  border: solid 2px;
+}
+
+.img-box {
+  padding: 0;
+  position: relative;
+  /* Для корректного отображения изображения внутри ячейки */
+}
+
+.left-button-container {
+  width: 30%;
+}
+
+.add-department-btn {
+  margin-left: 10%;
+}
