@@ -7,6 +7,13 @@ Spark 2.0 is an internal performance review application with:
 - MySQL/MariaDB persistence
 - Cookie-based authentication with CSRF protection
 
+## Repository Layout
+
+```text
+backend/   ASP.NET Core API, security, data access, and seed SQL
+frontend/  React + Vite client application
+```
+
 ## Local Development
 
 ### Backend
@@ -20,6 +27,7 @@ export SPARKDB_CONNECTION="Server=localhost;Port=3306;Database=sparkdb;User=spar
 Run the API:
 
 ```bash
+cd backend
 dotnet run --launch-profile http
 ```
 
@@ -34,13 +42,14 @@ http://localhost:5212
 Start the Vite dev server:
 
 ```bash
+cd frontend
 npm run dev
 ```
 
 Frontend default URL:
 
 ```text
-http://localhost:3001
+http://localhost:3000
 ```
 
 ## Database Bootstrap
@@ -48,13 +57,13 @@ http://localhost:3001
 Initialize the schema and seed data:
 
 ```bash
-mysql -u spark -p sparkdb < database/init.mysql.sql
+mysql -u spark -p sparkdb < backend/database/init.mysql.sql
 ```
 
 Optional extra employee for manual evaluation testing:
 
 ```bash
-mysql -u spark -p sparkdb < database/add-test-employee.mysql.sql
+mysql -u spark -p sparkdb < backend/database/add-test-employee.mysql.sql
 ```
 
 Default demo accounts:
@@ -69,6 +78,7 @@ Default demo accounts:
 Frontend:
 
 ```bash
+cd frontend
 npm test
 ```
 
@@ -83,15 +93,15 @@ dotnet test spark.generated.sln
 Run these on a machine with internet access:
 
 ```bash
-npm audit
-dotnet list spark.csproj package --vulnerable
+cd frontend && npm audit
+dotnet list backend/spark.csproj package --vulnerable
 ```
 
 Recommended additional checks:
 
 ```bash
-npm run lint
-npm run build
+cd frontend && npm run lint
+cd frontend && npm run build
 dotnet build spark.generated.sln
 ```
 
