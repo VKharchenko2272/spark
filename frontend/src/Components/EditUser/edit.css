@@ -1,0 +1,4 @@
+/* YourComponent.module.css */
+.noPaddingLeft {
+    padding-left: 0 !important; /* !important для переопределения существующих стилей */
+}

@@ -1,0 +1,250 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+    min-height: 100%;
+}
+
+body {
+    margin: 0;
+    background: linear-gradient(180deg, #f6f9fc 0%, #eef4fb 100%);
+    color: #0f172a;
+    overflow-x: hidden;
+}
+
+#root {
+    min-height: 100vh;
+}
+
+.app-shell {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: clip;
+}
+
+.app-main-area {
+    flex: 1;
+    overflow-x: clip;
+}
+
+.app-content-row {
+    width: min(100%, 1480px);
+    max-width: 1480px;
+    margin: 0 auto;
+    padding: 1.25rem 1.5rem 2rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+}
+
+.app-route-content {
+    flex: 1;
+    min-width: 0;
+    overflow-x: hidden;
+}
+
+.app-right-panel {
+    width: 280px;
+    flex: 0 0 280px;
+}
+
+.custom-row-height{
+    min-height: 800px;
+    margin-top: 4%;
+
+}
+
+.container{
+    padding-right: 0;
+}
+
+.helmet {
+    transition: width 2s, height 4s;
+}
+
+.title-list-people {
+
+    text-align: left;
+    font-weight: bold;
+}
+
+.category-scores {
+    text-align: left;
+    font-weight: bold;
+
+}
+
+.container2{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-bottom: 30px;
+}
+
+.container2.full-width {
+    width: 100%; /* or any other value that makes it occupy the space of the right panel */
+  }
+
+ul > h3 {
+    font-weight: 700;
+}
+
+.btn-dark{
+    border-radius: 10px;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 25%);
+}
+
+.Chart {
+    width: 100%;
+    height: 100%;
+    height: 400px;
+    padding-top: 2%;
+    padding-bottom: 3%;
+}
+
+.chart{
+    justify-content: center;
+    align-self: center;
+}
+
+.container-width-dashboard{
+    padding-right: 3%;
+}
+
+.home {
+    width: 100%;
+    /* max-width: 1200px; или любое другое значение, подходящее для вашей задачи */
+    margin: 0 auto;
+    text-align: center;
+}
+
+.block {
+    display: flex;
+    justify-content: center;
+}
+
+.homeH1 {
+    font-weight: bold;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: row;
+    padding-top: 1%;
+    width: 100%;
+}
+
+/*|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||*/
+
+/*----------------------------------------------------RightPanelComponent--------------------------------------------------------*/
+
+.right-panel {
+    width: 20%;
+}
+.status-message{
+    text-align: center;
+}
+
+/* .right-panel-view-evaluation-button {
+    float: right;
+} */
+
+.evaluation-button{
+
+    width: 150px; /* Set the width of the container */
+    margin: 0px 20px; /* Set the top/bottom margin */
+    padding: 10px 20px; /* Add padding to the container */
+    background-color: black; /* Set the container background color to black */
+    border-radius: 10px; /* Round the corners of the container */
+    display: flex; /* Use flex to center the button */
+    align-items: center; /* Center vertically */
+    justify-content: center; /* Center horizontally */
+}
+
+/* Styling the button itself */
+   .evaluation-button button {
+    width: 100%; /* Make the button fill the container */
+    padding: 0; /* Remove default padding */
+    background-color: transparent; /* Make the button background transparent */
+    color: white; /* Set the text color to white */
+    border: none; /* Remove any border */
+    border-radius: 10px; /* Ensure corners match container */
+    font-size: 12px; /* Set font size */
+    font-family: 'Roboto', sans-serif; /* Set font family */
+    font-weight: 500; /* Set font weight */
+    text-align: center; /* Center the text */
+    line-height: 1.5; /* Set line height for text */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    outline: none; /* Remove the default outline on focus */
+}
+
+.facebook-icon {
+    content: url("data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNDAgNDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+DQogICAgICAgIDxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE5LjUiIHN0cm9rZT0iIzRBNkU2RSIvPg0KICAgICAgICA8cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTI0LjQ4NDggMTMuNTk4QzIzLjkxMTcgMTMuNDg0NyAyMy4xMzc2IDEzLjQgMjIuNjUwNyAxMy40QzIxLjMzMjQgMTMuNCAyMS4yNDY4IDEzLjk2NjcgMjEuMjQ2OCAxNC44NzMzVjE2LjQ4NzNIMjQuNTQyMUwyNC4yNTQ5IDE5LjgzMDdIMjEuMjQ2OFYzMEgxNy4xMjA3VjE5LjgzMDdIMTVWMTYuNDg3M0gxNy4xMjA3VjE0LjQxOTNDMTcuMTIwNyAxMS41ODY3IDE4LjQ2NzMgMTAgMjEuODQ4MyAxMEMyMy4wMjI5IDEwIDIzLjg4MjcgMTAuMTcgMjUgMTAuMzk2N0wyNC40ODQ4IDEzLjU5OFoiIGZpbGw9IndoaXRlIi8+DQogICAgICAgIDwvc3ZnPg==")
+}
+
+.facebook-icon:hover {
+    content: url("data:image/svg+xml;base64,DQo8c3ZnIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4NCiAgICA8Y2lyY2xlIGN4PSIyMCIgY3k9IjIwIiByPSIyMCIgZmlsbD0iI0RERTJFMiIvPg0KICAgIDxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMjQuNDg0OCAxMy41OThDMjMuOTExNyAxMy40ODQ3IDIzLjEzNzYgMTMuNCAyMi42NTA3IDEzLjRDMjEuMzMyNCAxMy40IDIxLjI0NjggMTMuOTY2NyAyMS4yNDY4IDE0Ljg3MzNWMTYuNDg3M0gyNC41NDIxTDI0LjI1NDkgMTkuODMwN0gyMS4yNDY4VjMwSDE3LjEyMDdWMTkuODMwN0gxNVYxNi40ODczSDE3LjEyMDdWMTQuNDE5M0MxNy4xMjA3IDExLjU4NjcgMTguNDY3MyAxMCAyMS44NDgzIDEwQzIzLjAyMjkgMTAgMjMuODgyNyAxMC4xNyAyNSAxMC4zOTY3TDI0LjQ4NDggMTMuNTk4WiIgZmlsbD0iIzAwMzMzMyIvPg0KICAgIDwvc3ZnPg==");
+}
+
+.youtube-icon {
+    content: url( "data:image/svg+xml;base64,ICA8c3ZnIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4NCiAgICAgICAgICAgIDxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE5LjUiIHN0cm9rZT0iIzRBNkU2RSIvPg0KICAgICAgICAgICAgPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0yOC4wMTg2IDE0LjkxODdDMjguMjk4MSAxNS4xODQ4IDI4LjQ5OTUgMTUuNTE1OSAyOC42MDI4IDE1Ljg3OTFDMjkuMTk3MyAxOC4xNTcxIDI5LjA1OTkgMjEuNzU0OSAyOC42MTQzIDI0LjEyMDlDMjguNTExMSAyNC40ODQxIDI4LjMwOTcgMjQuODE1MiAyOC4wMzAxIDI1LjA4MTNDMjcuNzUwNiAyNS4zNDc0IDI3LjQwMjggMjUuNTM5MSAyNy4wMjEyIDI1LjYzNzRDMjUuNjI0NCAyNiAyMC4wMDI0IDI2IDIwLjAwMjQgMjZDMjAuMDAyNCAyNiAxNC4zODA1IDI2IDEyLjk4MzYgMjUuNjM3NEMxMi42MDIxIDI1LjUzOTEgMTIuMjU0MiAyNS4zNDc0IDExLjk3NDcgMjUuMDgxM0MxMS42OTUyIDI0LjgxNTIgMTEuNDkzOCAyNC40ODQxIDExLjM5MDYgMjQuMTIwOUMxMC43OTI2IDIxLjg1MjcgMTAuOTU2NSAxOC4yNTI3IDExLjM3OSAxNS44OTAxQzExLjQ4MjMgMTUuNTI2OSAxMS42ODM3IDE1LjE5NTggMTEuOTYzMiAxNC45Mjk3QzEyLjI0MjcgMTQuNjYzNiAxMi41OTA1IDE0LjQ3MTkgMTIuOTcyMSAxNC4zNzM2QzE0LjM2ODkgMTQuMDExIDE5Ljk5MDkgMTQgMTkuOTkwOSAxNEMxOS45OTA5IDE0IDI1LjYxMjkgMTQgMjcuMDA5NyAxNC4zNjI2QzI3LjM5MTIgMTQuNDYwOSAyNy43MzkxIDE0LjY1MjYgMjguMDE4NiAxNC45MTg3Wk0yMi44NjU0IDIwTDE4LjIwMTYgMjIuNTcxNFYxNy40Mjg2TDIyLjg2NTQgMjBaIiBmaWxsPSJ3aGl0ZSIvPg0KICAgICAgICAgICAgPC9zdmc+")
+}
+
+.youtube-icon:hover {
+    content: url("data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNDAgNDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+DQogICAgPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiNEREUyRTIiLz4NCiAgICA8cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTI4LjAxODYgMTQuOTE4N0MyOC4yOTgxIDE1LjE4NDggMjguNDk5NSAxNS41MTU5IDI4LjYwMjggMTUuODc5MUMyOS4xOTczIDE4LjE1NzEgMjkuMDU5OSAyMS43NTQ5IDI4LjYxNDMgMjQuMTIwOUMyOC41MTExIDI0LjQ4NDEgMjguMzA5NyAyNC44MTUyIDI4LjAzMDEgMjUuMDgxM0MyNy43NTA2IDI1LjM0NzQgMjcuNDAyOCAyNS41MzkxIDI3LjAyMTIgMjUuNjM3NEMyNS42MjQ0IDI2IDIwLjAwMjQgMjYgMjAuMDAyNCAyNkMyMC4wMDI0IDI2IDE0LjM4MDUgMjYgMTIuOTgzNiAyNS42Mzc0QzEyLjYwMjEgMjUuNTM5MSAxMi4yNTQyIDI1LjM0NzQgMTEuOTc0NyAyNS4wODEzQzExLjY5NTIgMjQuODE1MiAxMS40OTM4IDI0LjQ4NDEgMTEuMzkwNiAyNC4xMjA5QzEwLjc5MjYgMjEuODUyNyAxMC45NTY1IDE4LjI1MjcgMTEuMzc5IDE1Ljg5MDFDMTEuNDgyMyAxNS41MjY5IDExLjY4MzcgMTUuMTk1OCAxMS45NjMyIDE0LjkyOTdDMTIuMjQyNyAxNC42NjM2IDEyLjU5MDUgMTQuNDcxOSAxMi45NzIxIDE0LjM3MzZDMTQuMzY4OSAxNC4wMTEgMTkuOTkwOSAxNCAxOS45OTA5IDE0QzE5Ljk5MDkgMTQgMjUuNjEyOSAxNCAyNy4wMDk3IDE0LjM2MjZDMjcuMzkxMiAxNC40NjA5IDI3LjczOTEgMTQuNjUyNiAyOC4wMTg2IDE0LjkxODdaTTIyLjg2NTQgMjBMMTguMjAxNiAyMi41NzE0VjE3LjQyODZMMjIuODY1NCAyMFoiIGZpbGw9IiMwMDMzMzMiLz4NCiAgICA8L3N2Zz4NCiAgICA=");
+}
+
+.linkedin-icon {
+    content: url("data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNDAgNDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+DQogICAgPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMTkuNSIgc3Ryb2tlPSIjNEE2RTZFIi8+DQogICAgPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xNS42ODk1IDEyLjc1NUMxNS42ODk1IDEzLjcxMTggMTQuOTU2OSAxNC40ODYxIDEzLjgxMTQgMTQuNDg2MUMxMi43MTA0IDE0LjQ4NjEgMTEuOTc3OCAxMy43MTE4IDEyLjAwMDUgMTIuNzU1QzExLjk3NzggMTEuNzUxNyAxMi43MTA0IDExIDEzLjgzMzMgMTFDMTQuOTU2OSAxMSAxNS42Njc1IDExLjc1MTcgMTUuNjg5NSAxMi43NTVaTTEyLjA5MjYgMjYuOTk4MVYxNS44NTM2SDE1LjU3NTRWMjYuOTk3NEgxMi4wOTI2VjI2Ljk5ODFaIiBmaWxsPSJ3aGl0ZSIvPg0KICAgIDxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMTguMzY3NCAxOS40MTA2QzE4LjM2NzQgMTguMDIwNSAxOC4zMjEzIDE2LjgzNTUgMTguMjc1MyAxNS44NTU1SDIxLjMwMDRMMjEuNDYxMiAxNy4zODIySDIxLjUzQzIxLjk4ODMgMTYuNjc1NiAyMy4xMzM5IDE1LjYwNTQgMjQuOTkwMSAxNS42MDU0QzI3LjI4MTMgMTUuNjA1NCAyOSAxNy4xMDk2IDI5IDIwLjM4OTlWMjdIMjUuNTE3MlYyMC44MjM5QzI1LjUxNzIgMTkuMzg3NCAyNS4wMTM1IDE4LjQwOCAyMy43NTMxIDE4LjQwOEMyMi43OTAzIDE4LjQwOCAyMi4yMTc5IDE5LjA2ODkgMjEuOTg5IDE5LjcwNjVDMjEuODk2OSAxOS45MzQ4IDIxLjg1MTYgMjAuMjUzMyAyMS44NTE2IDIwLjU3MzFWMjdIMTguMzY4OFYxOS40MTA2SDE4LjM2NzRaIiBmaWxsPSJ3aGl0ZSIvPg0KPC9zdmc+" )
+}
+
+.linkedin-icon:hover {
+    content: url("data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNDAgNDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+DQogICAgPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiNEREUyRTIiLz4NCiAgICA8cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTE1LjY4OTUgMTIuNzU1QzE1LjY4OTUgMTMuNzExOCAxNC45NTY5IDE0LjQ4NjEgMTMuODExNCAxNC40ODYxQzEyLjcxMDQgMTQuNDg2MSAxMS45Nzc4IDEzLjcxMTggMTIuMDAwNSAxMi43NTVDMTEuOTc3OCAxMS43NTE3IDEyLjcxMDQgMTEgMTMuODMzMyAxMUMxNC45NTY5IDExIDE1LjY2NzUgMTEuNzUxNyAxNS42ODk1IDEyLjc1NVpNMTIuMDkyNiAyNi45OTgxVjE1Ljg1MzZIMTUuNTc1NFYyNi45OTc0SDEyLjA5MjZWMjYuOTk4MVoiIGZpbGw9IiMwMDMzMzMiLz4NCiAgICA8cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTE4LjM2NzQgMTkuNDEwNkMxOC4zNjc0IDE4LjAyMDUgMTguMzIxMyAxNi44MzU1IDE4LjI3NTMgMTUuODU1NUgyMS4zMDA0TDIxLjQ2MTIgMTcuMzgyMkgyMS41M0MyMS45ODgzIDE2LjY3NTYgMjMuMTMzOSAxNS42MDU0IDI0Ljk5MDEgMTUuNjA1NEMyNy4yODEzIDE1LjYwNTQgMjkgMTcuMTA5NiAyOSAyMC4zODk5VjI3SDI1LjUxNzJWMjAuODIzOUMyNS41MTcyIDE5LjM4NzQgMjUuMDEzNSAxOC40MDggMjMuNzUzMSAxOC40MDhDMjIuNzkwMyAxOC40MDggMjIuMjE3OSAxOS4wNjg5IDIxLjk4OSAxOS43MDY1QzIxLjg5NjkgMTkuOTM0OCAyMS44NTE2IDIwLjI1MzMgMjEuODUxNiAyMC41NzMxVjI3SDE4LjM2ODhWMTkuNDEwNkgxOC4zNjc0WiIgZmlsbD0iIzAwMzMzMyIvPg0KICAgIDwvc3ZnPg==" )
+}
+
+
+.social-icon {
+    width: 2rem;
+    height: auto;
+    border-radius: 50%;
+    border: solid white 0.05rem;
+}
+/*|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| */
+
+.form-margin{
+    margin-right: 18%;
+}
+
+.cat-score-wrapper{
+    margin-top: 2%;
+}
+
+@media (max-width: 1024px) {
+    .app-content-row {
+        padding: 1rem;
+        gap: 1rem;
+    }
+
+    .app-right-panel {
+        width: 240px;
+        flex-basis: 240px;
+    }
+}
+
+@media (max-width: 900px) {
+    .app-content-row {
+        flex-direction: column;
+    }
+
+    .app-right-panel {
+        width: 100%;
+        flex-basis: auto;
+    }
+}
