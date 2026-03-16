@@ -1,49 +1,47 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-// Topic and Category Name Maps
 const categoryNameMap = {
     1: "Teamwork",
-    2: "Code Aesthetics",
-    3: "Communication",
-    4: "Best Practices",
-    5: "Knowledge Application and Problem Solving Comments"
+    2: "Communication",
+    3: "Knowledge Application and Problem Solving",
+    4: "Code Aesthetics",
+    5: "Best Practices"
 };
 
 const topicNameMap = {
     1: "Collaboration",
     2: "Conflict Resolution",
-    3: "Task Manager",
+    3: "Task Management",
     4: "Adapting to Change",
     5: "Mentoring",
-    6: "Documentation",
-    7: "Formatting Standards",
-    8: "Naming",
-    9: "Syntax and Organization",
-    10: "Engagement",
-    11: "Verbal Communication",
-    12: "Written Communication",
-    13: "Providing Feedback",
-    14: "Receiving Feedback",
-    15: "Testing",
-    16: "Refactoring/Readability",
-    17: "Defensive Programming",
-    18: "Performance",
-    19: "Security",
-    20: "Strategy and Critical Thinking Comments",
-    21: "Debugging Techniques",
-    22: "Tool Selection and Usage"
+    6: "Engagement",
+    7: "Verbal Communication",
+    8: "Written Communication",
+    9: "Providing Feedback",
+    10: "Receiving Feedback",
+    11: "Strategy and Critical Thinking Comments",
+    12: "Debugging Techniques",
+    13: "Tool Selection and Usage",
+    14: "Documentation",
+    15: "Formatting Standards",
+    16: "Naming",
+    17: "Syntax and Organization",
+    18: "Testing",
+    19: "Refactoring/Readability",
+    20: "Defensive Programming",
+    21: "Performance",
+    22: "Security"
 };
 
-// Link Topics to Categories
 const categoryTopicMap = {
-    1: [1, 2, 3, 4, 5], // Teamwork topics
-    2: [6, 7, 8, 9, 10], // Code Aesthetics topics
-    3: [11, 12, 13], // Communication topics
-    4: [14, 15, 16, 17], // Best Practices topics
-    5: [18, 19, 20, 21, 22] // Knowledge Application and Problem Solving Comments topics
+    1: [1, 2, 3, 4, 5],
+    2: [6, 7, 8, 9, 10],
+    3: [11, 12, 13],
+    4: [14, 15, 16, 17],
+    5: [18, 19, 20, 21, 22]
 };
 
-// Component to display individual topic scores
 function TopicScore({ topicId, score }) {
     const topicName = topicNameMap[topicId] || `Topic ${topicId}`;
     return (
@@ -54,7 +52,11 @@ function TopicScore({ topicId, score }) {
     );
 }
 
-// Component to display a category and its topics
+TopicScore.propTypes = {
+    topicId: PropTypes.number.isRequired,
+    score: PropTypes.number.isRequired,
+};
+
 function CategoryOverview({ categoryId, topics = [], totalScore }) {
     const categoryName = categoryNameMap[categoryId] || `Category ${categoryId}`;
     const categoryTopics = categoryTopicMap[categoryId] || [];
@@ -63,7 +65,7 @@ function CategoryOverview({ categoryId, topics = [], totalScore }) {
         <div className="col-6 flex-column justify-content-start text-start">
             <div className="row border-bottom">
                 <p className="h5 col-auto pb-1">{categoryName}</p>
-                <p className="h5 col text-end">{totalScore}</p> {/* Display total score */}
+                <p className="h5 col text-end">{totalScore}</p>
             </div>
             <div>
                 {categoryTopics.map((topicId, index) => {
@@ -71,26 +73,51 @@ function CategoryOverview({ categoryId, topics = [], totalScore }) {
                     if (topic) {
                         return <TopicScore key={index} topicId={topic.id} score={topic.score} />;
                     }
-                    return <TopicScore key={index} topicId={topicId} score={0} />; // Placeholder for missing topics
+                    return <TopicScore key={index} topicId={topicId} score={0} />;
                 })}
             </div>
         </div>
     );
 }
 
+CategoryOverview.propTypes = {
+    categoryId: PropTypes.number.isRequired,
+    topics: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.number.isRequired,
+            score: PropTypes.number.isRequired,
+        })
+    ),
+    totalScore: PropTypes.number.isRequired,
+};
 
-// Main Overview component to render all categories
+
 export default function Overview({ categories = [] }) {
     return (
         <div className="row gx-5 gy-3">
             {categories.map(category => (
                 <CategoryOverview
-                    key={category.category_id} // Use category_id from the API response
-                    categoryId={category.category_id} // Pass category_id correctly
-                    topics={category.topics || []} // Pass topics array correctly
-                    totalScore={category.total_score || 0} // Pass the total_score correctly
+                    key={category.category_id}
+                    categoryId={category.category_id}
+                    topics={category.topics || []}
+                    totalScore={category.total_score || 0}
                 />
             ))}
         </div>
     );
 }
+
+Overview.propTypes = {
+    categories: PropTypes.arrayOf(
+        PropTypes.shape({
+            category_id: PropTypes.number.isRequired,
+            total_score: PropTypes.number,
+            topics: PropTypes.arrayOf(
+                PropTypes.shape({
+                    id: PropTypes.number.isRequired,
+                    score: PropTypes.number.isRequired,
+                })
+            ),
+        })
+    ),
+};

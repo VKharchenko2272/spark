@@ -1,9 +1,58 @@
-/* html,
-body, */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body,
 #root {
     min-height: 100%;
 }
-.g-0
+
+body {
+    margin: 0;
+    background: linear-gradient(180deg, #f6f9fc 0%, #eef4fb 100%);
+    color: #0f172a;
+    overflow-x: hidden;
+}
+
+#root {
+    min-height: 100vh;
+}
+
+.app-shell {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: clip;
+}
+
+.app-main-area {
+    flex: 1;
+    overflow-x: clip;
+}
+
+.app-content-row {
+    width: min(100%, 1480px);
+    max-width: 1480px;
+    margin: 0 auto;
+    padding: 1.25rem 1.5rem 2rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+}
+
+.app-route-content {
+    flex: 1;
+    min-width: 0;
+    overflow-x: hidden;
+}
+
+.app-right-panel {
+    width: 280px;
+    flex: 0 0 280px;
+}
 
 .custom-row-height{
     min-height: 800px;
@@ -43,25 +92,8 @@ body, */
     width: 100%; /* or any other value that makes it occupy the space of the right panel */
   }
 
-.footer {
-
-    text-align: center;
-    background-color: hsl(221, 64%, 39%);
-    min-height: 40px;
-    color: #FFFFFF;
-    padding: 1rem 0 6rem;
-    align-items: flex-start;
-    justify-content: center;
-}
-
 ul > h3 {
     font-weight: 700;
-}
-
-.footer a {
-    color: #d3d3d3e2;
-    /* Light Gray */
-    text-decoration: none;
 }
 
 .btn-dark{
@@ -151,7 +183,7 @@ ul > h3 {
     line-height: 1.5; /* Set line height for text */
     cursor: pointer; /* Change cursor to pointer on hover */
     outline: none; /* Remove the default outline on focus */
-} 
+}
 
 .facebook-icon {
     content: url("data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNDAgNDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+DQogICAgICAgIDxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE5LjUiIHN0cm9rZT0iIzRBNkU2RSIvPg0KICAgICAgICA8cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTI0LjQ4NDggMTMuNTk4QzIzLjkxMTcgMTMuNDg0NyAyMy4xMzc2IDEzLjQgMjIuNjUwNyAxMy40QzIxLjMzMjQgMTMuNCAyMS4yNDY4IDEzLjk2NjcgMjEuMjQ2OCAxNC44NzMzVjE2LjQ4NzNIMjQuNTQyMUwyNC4yNTQ5IDE5LjgzMDdIMjEuMjQ2OFYzMEgxNy4xMjA3VjE5LjgzMDdIMTVWMTYuNDg3M0gxNy4xMjA3VjE0LjQxOTNDMTcuMTIwNyAxMS41ODY3IDE4LjQ2NzMgMTAgMjEuODQ4MyAxMEMyMy4wMjI5IDEwIDIzLjg4MjcgMTAuMTcgMjUgMTAuMzk2N0wyNC40ODQ4IDEzLjU5OFoiIGZpbGw9IndoaXRlIi8+DQogICAgICAgIDwvc3ZnPg==")
@@ -192,4 +224,27 @@ ul > h3 {
 
 .cat-score-wrapper{
     margin-top: 2%;
+}
+
+@media (max-width: 1024px) {
+    .app-content-row {
+        padding: 1rem;
+        gap: 1rem;
+    }
+
+    .app-right-panel {
+        width: 240px;
+        flex-basis: 240px;
+    }
+}
+
+@media (max-width: 900px) {
+    .app-content-row {
+        flex-direction: column;
+    }
+
+    .app-right-panel {
+        width: 100%;
+        flex-basis: auto;
+    }
 }

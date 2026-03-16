@@ -1,79 +1,67 @@
 import return_icon from '../img/return-icon.svg';
 import React, { useState, useEffect } from 'react';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
 import './eval-overlook-style.css';
 import SelfEvaluationModal from '../SelfEvaluationModal';
+import { useAuth } from '../../auth/AuthContext';
+import { api, apiFetch } from '../../lib/api';
 
 
 function EvaluationComponent() {
   const navigate = useNavigate();
   const { id } = useParams();
+  const { user } = useAuth();
 
-  // Storing the situation for all ratings and comments
   const [selectedIndexes, setSelectedIndexes] = useState({});
   const [comments, setComments] = useState({});
-  const [departmentId, setDepartmentId] = useState(null);
-  const [error, setError] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [userFirstName, setUserFirstName] = useState('');
-  const [showModal, setShowModal] = useState(false);
+  const loggedInUserId = user?.id;
+  const isSelfEvaluation = Boolean(id && loggedInUserId && loggedInUserId === parseInt(id));
 
   useEffect(() => {
-
-    // Get the logged-in user's ID
-    const loggedInUserId = parseInt(localStorage.getItem('userId'));
-
-    // Check if the logged-in user is trying to evaluate themselves
-    if (loggedInUserId === parseInt(id)) {
-      setShowModal(true);
+    if (!id || !loggedInUserId) {
       return;
     }
 
-    // Check if an evaluation already exists for the user
-    axios.get(`http://localhost:5212/evaluate/user/${id}`)
+    if (isSelfEvaluation) {
+      return;
+    }
+
+    api.get(`/evaluations/users/${id}`)
       .then(response => {
         if (response.data) {
-          // If a record is found, alert the user and navigate back
-          alert('Record was already applied');
-          navigate(-1); // Redirect to the previous page
+          setErrorMessage('A recent evaluation already exists for this user.');
         }
       })
       .catch(error => {
-        // Handle the case where no record is found or other errors
-        if (error.response && error.response.status === 404) {
-          console.log("No recent evaluation found, proceeding with the evaluation form.");
-        } else {
-          setError('Failed to check existing evaluation record');
-          console.error(error);
+        if (!error.response || error.response.status !== 404) {
+          setErrorMessage(error?.response?.data?.message || 'Failed to check existing evaluation record.');
         }
       });
 
-    // Getting the user's department ID
-    axios.get(`http://localhost:5212/users/${id}`)
+    api.get(`/users/${id}`)
       .then(response => {
-        if (response.data && response.data.department) {
-          setDepartmentId(response.data.department.id); // Сохранение ID отдела
-          setUserFirstName(response.data.username);
-        }   
+        if (response.data) {
+          setUserFirstName(
+            [response.data.firstname, response.data.lastname].filter(Boolean).join(' ')
+          );
+        }
       })
       .catch(error => {
-        setError('Failed to fetch user department');
-        console.error(error);
+        setErrorMessage(error?.response?.data?.message || 'Failed to fetch user department.');
       });
-  }, [id, navigate]);
+  }, [id, loggedInUserId, isSelfEvaluation]);
 
-  // Handler for selecting ratings
-  const handleRatingChange = (categoryId, topicId, optionId) => {
+  const handleRatingChange = (topicId, optionId) => {
     setSelectedIndexes(prev => ({
       ...prev,
-      [topicId]: optionId // Using the topic `id` and options
+      [topicId]: optionId
     }));
   };
 
-  // Handler for changing comments to subsections and sections
   const handleCommentChange = (key, value) => {
     setComments(prev => ({
       ...prev,
@@ -81,10 +69,14 @@ function EvaluationComponent() {
     }));
   };
 
-  // Function for submitting a form to the server
   const handleSubmitForm = async () => {
-    setErrorMessage('');  // Очистка предыдущих ошибок
-    setSuccessMessage('');  // Очистка сообщения об успехе
+    if (!loggedInUserId) {
+      setErrorMessage('Your session has expired. Please log in again.');
+      return;
+    }
+
+    setErrorMessage('');
+    setSuccessMessage('');
 
     let allFieldsFilled = true;
 
@@ -112,36 +104,21 @@ function EvaluationComponent() {
 
     const payload = {
       userId: parseInt(id),
-      departmentId: departmentId,
-      managerId: parseInt(localStorage.getItem('userId')),
-      evaluationOptions: [],  // To store selected options
-      topicComments: [],    // For comments on subsections
-      categoryComments: []  // For comments on sections
+      evaluationOptions: [],
+      categoryComments: []
     };
 
-    // We go through each section and collect selected ratings and comments
     sections.forEach((section) => {
       section.subSections.forEach((subSection) => {
-        // If the rating is selected, add it to the payload
         if (selectedIndexes[subSection.id] !== undefined) {
           payload.evaluationOptions.push({
-            categoryId: section.id,   // ID категории
-            topicId: subSection.id,   // ID топика (подраздела)
-            comment: comments[`subSection-${subSection.id}`],
-            score: selectedIndexes[subSection.id]  // ID выбранной опции
-          });
-        }
-
-        // Добавляем комментарии к подразделам
-        if (comments[`subSection-${subSection.id}`]) {
-          payload.topicComments.push({
             topicId: subSection.id,
-            comment: comments[`subSection-${subSection.id}`]
+            comment: comments[`subSection-${subSection.id}`],
+            score: selectedIndexes[subSection.id]
           });
         }
       });
 
-      // Добавляем комментарии к разделам
       if (comments[`section-${section.id}`]) {
         payload.categoryComments.push({
           categoryId: section.id,
@@ -149,12 +126,9 @@ function EvaluationComponent() {
         });
       }
     });
-    console.log(payload)
-    console.log("Отправляемые данные:", JSON.stringify(payload, null, 2));
 
-    // Отправка данных на сервер
     try {
-      const response = await fetch('http://localhost:5212/evaluate', {
+      const response = await apiFetch('/evaluations', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -162,31 +136,25 @@ function EvaluationComponent() {
         body: JSON.stringify(payload),
       });
 
-      console.log(response);
-      // const data = await response.json();
+      if (!response.ok) {
+        const errorPayload = await response.json().catch(() => null);
+        setErrorMessage(errorPayload?.message || 'Failed to submit evaluation form');
+        return;
+      }
 
-
-
-      // Если форма была успешно отправлена
       setSuccessMessage('Form submitted successfully');
       setTimeout(() => {
-        navigate(-1);  // Переход назад после успеха
+        navigate(-1);
       }, 2000);
-
-
-      console.log('Form submitted successfully');
     } catch (error) {
-      console.error(error);
-      setErrorMessage('Failed to submit evaluation form');
+      setErrorMessage(error?.message || 'Failed to submit evaluation form');
     }
   };
 
   const handleClose = () => {
-    setShowModal(false);
     navigate(-1);
   }
 
-  // Структура данных для разделов и подразделов с `id` для каждой категории и опции
   const sections = [
     {
       id: 1,
@@ -516,14 +484,14 @@ function EvaluationComponent() {
       <Helmet>
         <title>Evaluation</title>
       </Helmet>
-      {showModal &&(
+      {isSelfEvaluation &&(
         <SelfEvaluationModal
         message = "User can't evaluate himself"
         onClose = {handleClose}
         />
       )}
       <div>
-        <h1>{userFirstName}'s rubrics</h1>
+        <h1>{userFirstName}&apos;s rubrics</h1>
       </div>
       <div>
         <button className="return-button btn btn-dark" onClick={() => navigate(-1)}>
@@ -549,7 +517,7 @@ function EvaluationComponent() {
                   <div
                     key={option.id}
                     className={`wrapper-element ${selectedIndexes[subSection.id] === option.id ? 'selected' : ''}`}
-                    onClick={() => handleRatingChange(section.id, subSection.id, option.id)}
+                    onClick={() => handleRatingChange(subSection.id, option.id)}
                   >
                     <p className="option">{option.text}</p>
                   </div>

@@ -64,23 +64,24 @@
   width: 99%;
   margin-top: 25px;
 
- 
+
 }
 
 .wrapper-element {
- 
+
   position: relative;
   box-shadow: 2px 2px 5px gray;
   margin: 5px;
   border-radius: 3%;
-  padding: 20px; /* Уменьшил padding, чтобы текст не выглядел слишком далеко от границ */
-  height: auto; /* Задал фиксированную высоту для всех элементов */
-  max-width: 300px; /* Можно задать максимальную ширину, чтобы избежать слишком широких элементов */
+  padding: 20px;
+  height: auto;
+  max-width: 300px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
   min-height: 200px;
+  cursor: pointer;
 }
 
 .wrapper-element:hover {
@@ -92,17 +93,18 @@
   border: 2px solid black;
   box-shadow: none;
   box-shadow: inset 0px 6px 17px 0px rgba(0, 0, 0, 25%);
+  cursor: pointer;
 }
 .wrapper-option {
- 
+
   position: relative;
   box-shadow: 2px 2px 5px gray;
   margin: 5px;
   border-radius: 3%;
-  padding: 20px; 
-  min-height: 200px; 
+  padding: 20px;
+  min-height: 200px;
   height: auto;
-  max-width: 300px; 
+  max-width: 300px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -139,7 +141,7 @@
   margin-left: 10px;
 }
 
-form {
+.evaluation-view form {
   display: flex;
   align-items: center;
   justify-content: center;

@@ -1,56 +1,41 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useMemo, useState } from 'react';
+import PropTypes from 'prop-types';
 import profile_icon from '../People/img/profile.png';
+import { buildApiUrl } from '../../lib/api';
 
-function HeaderInfo({ userId, altText }) {
-  const [profileImageUrl, setProfileImageUrl] = useState(null);
-  const [department, setDepartment] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [error, setError] = useState('');
+function HeaderInfo({ user, altText }) {
+  const [useFallbackImage, setUseFallbackImage] = useState(false);
 
-  useEffect(() => {
-    if (!userId) return;
+  const fullName = useMemo(() => `${user?.firstname || ''} ${user?.lastname || ''}`.trim(), [user?.firstname, user?.lastname]);
+  const imageSrc = !useFallbackImage && user?.img ? buildApiUrl(`/users/${user.id}/image`) : profile_icon;
 
-    axios.get(`http://localhost:5212/images/${userId}`, { responseType: 'blob' })
-      .then(imageResponse => {
-        const imageUrl = URL.createObjectURL(imageResponse.data);
-        setProfileImageUrl(imageUrl);
-      })
-      .catch(error => {
-        console.error('Error fetching profile image:', error);
-        setProfileImageUrl(null);
-      });
-
-    axios.get(`http://localhost:5212/users/${userId}`)
-      .then(response => {
-        if (response.data) {
-          const { firstname, lastname, department } = response.data;
-          setFirstName(firstname);
-          setLastName(lastname);
-          setDepartment(department ? department.name : '');
-        }
-      })
-      .catch(error => {
-        setError('Failed to fetch user information');
-        console.error(error);
-      });
-  }, [userId]);
+  if (!user) {
+    return null;
+  }
 
   return (
-    // <div className='col-auto row align-items-center m-0 ms-auto'></div>
-    <>
-      {!error && (
-        <p className='col-auto m-0 p-0 ms-auto'>{firstName}</p>
-      )}
+    <div className="header-info">
+      <p className="name-block">{fullName || user.username}</p>
       <img
-      className='col-auto p-0 img-thumbnail'
-        src={profileImageUrl || profile_icon}
-        alt={altText || `${firstName} ${lastName}`}
-        style={{ width: '75px', height: '75px', borderRadius: '50%' }}
+        className="img-thumbnail"
+        src={imageSrc}
+        alt={altText || fullName || user.username}
+        style={{ width: '52px', height: '52px', borderRadius: '50%' }}
+        onError={() => setUseFallbackImage(true)}
       />
-    </>
+    </div>
   );
 }
 
 export default HeaderInfo;
+
+HeaderInfo.propTypes = {
+  user: PropTypes.shape({
+    id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+    firstname: PropTypes.string,
+    lastname: PropTypes.string,
+    username: PropTypes.string.isRequired,
+    img: PropTypes.string,
+  }),
+  altText: PropTypes.string,
+};

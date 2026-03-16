@@ -1,257 +1,196 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
-import './edit.css'
+import './edit.css';
 import { Helmet } from 'react-helmet-async';
+import { ROLE_OPTIONS } from '../../data/roles';
+import { api } from '../../lib/api';
+import '../admin-form.css';
 
 const EditUser = () => {
-    const { id } = useParams();
-    const [employee, setEmployee] = useState({
-        firstname: '',
-        lastname: '',
-        email: '',
-        username: '',
-        password: '',
-        company_role: '',
-        is_admin: false,
-        hired_date: '',
-        manager_id: '',
-        department_id: '',
-        img: null,
-    });
+  const { id } = useParams();
+  const [employee, setEmployee] = useState({
+    firstname: '',
+    lastname: '',
+    email: '',
+    username: '',
+    password: '',
+    company_role: '',
+    role: 'employee',
+    hired_date: '',
+    manager_id: '',
+    department_id: '',
+    img: false,
+  });
 
-    const [file, setFile] = useState(null);
-    const [departments, setDepartments] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [errorMessage, setErrorMessage] = useState('');
-    const [successMessage, setSuccessMessage] = useState('');
+  const [file, setFile] = useState(null);
+  const [departments, setDepartments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
-    useEffect(() => {
-        const element = document.querySelector('.custom-row-height');
-        if (element) {
-            element.classList.remove('custom-row-height');
+  useEffect(() => {
+    const element = document.querySelector('.custom-row-height');
+    if (element) {
+      element.classList.remove('custom-row-height');
+    }
+  }, []);
+
+  useEffect(() => {
+    const fetchEmployee = async () => {
+      try {
+        const response = await api.get(`/users/${id}`);
+        const data = response.data;
+        if (data.hired_date) {
+          data.hired_date = data.hired_date.split('T')[0];
         }
-    }, []);
-
-    useEffect(() => {
-        const fetchEmployee = async () => {
-            try {
-                const response = await axios.get(`http://localhost:5212/users/${id}`);
-                const data = response.data;
-                if (data.hired_date) {
-                    data.hired_date = data.hired_date.split('T')[0];
-                }
-                setEmployee(data);
-                setLoading(false);
-            } catch (error) {
-                console.error('Error fetching employee:', error);
-            }
-        };
-
-        const fetchDepartments = async () => {
-            try {
-                const response = await axios.get('http://localhost:5212/departments');
-                setDepartments(response.data);
-            } catch (error) {
-                console.error('Error fetching departments:', error);
-            }
-        };
-
-        fetchEmployee();
-        fetchDepartments();
-    }, [id]);
-
-    const handleChange = (e) => {
-        const { name, value, type, checked } = e.target;
         setEmployee((prev) => ({
-            ...prev,
-            [name]: type === 'checkbox' ? checked : value,
+          ...prev,
+          ...data,
+          password: '',
         }));
+        setLoading(false);
+      } catch {
+        setErrorMessage('Failed to fetch employee.');
+      }
     };
 
-    const handleFileChange = (e) => {
-        setFile(e.target.files[0]);
+    const fetchDepartments = async () => {
+      try {
+        const response = await api.get('/departments');
+        setDepartments(response.data);
+      } catch {
+        setErrorMessage('Failed to fetch departments.');
+      }
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    void fetchEmployee();
+    void fetchDepartments();
+  }, [id]);
 
-        const formData = new FormData();
-        Object.keys(employee).forEach((key) => {
-            formData.append(key, employee[key]);
-        });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setEmployee((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
-        if (file) {
-            formData.append('image', file);
-        }
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+  };
 
-        try {
-            const response = await axios.put(`http://localhost:5212/edit/${id}`, formData);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setErrorMessage('');
+    setSuccessMessage('');
 
-            if (response.status === 204) {
-                alert('Employee updated successfully!');
-                setSuccessMessage('Employee updated successfully!');
-            } else {
-                alert('Failed to update employee.');
-                setErrorMessage('Failed to update employee!');
-            }
-        } catch (error) {
-            console.error('Error updating employee:', error);
-        }
-    };
+    const formData = new FormData();
+    formData.append('firstname', employee.firstname);
+    formData.append('lastname', employee.lastname);
+    formData.append('email', employee.email);
+    formData.append('username', employee.username);
+    formData.append('password', employee.password);
+    formData.append('company_role', employee.company_role);
+    formData.append('role', employee.role);
+    formData.append('hired_date', employee.hired_date);
+    formData.append('manager_id', employee.manager_id || '');
+    formData.append('department_id', employee.department_id || '');
 
-    if (loading) {
-        return <div>Loading...</div>;
+    if (file) {
+      formData.append('image', file);
     }
 
-    return (
-        <div className="container mt-5" >
-            <Helmet> <title>Edit User</title></Helmet>
-            <form className='form-margin' onSubmit={handleSubmit} encType="multipart/form-data">
+    try {
+      await api.put(`/users/${id}`, formData);
+      setSuccessMessage('Employee updated successfully!');
+    } catch (error) {
+      setErrorMessage(error?.response?.data?.message || 'Failed to update employee.');
+    }
+  };
 
-                <ul className="list-group">
-                    <h2 className="mb-4">Edit Employee</h2>
-                    <li className="list-group-item">
-                        <label className="form-label">First Name:</label>
-                        <input
-                            type="text"
-                            name="firstname"
-                            className="form-control"
-                            value={employee.firstname}
-                            onChange={handleChange}
-                            required
-                        />
-                    </li>
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
-                    <li className="list-group-item">
-                        <label className="form-label">Last Name:</label>
-                        <input
-                            type="text"
-                            name="lastname"
-                            className="form-control"
-                            value={employee.lastname}
-                            onChange={handleChange}
-                            required
-                        />
-                    </li>
-
-                    <li className="list-group-item">
-                        <label className="form-label">Email:</label>
-                        <input
-                            type="email"
-                            name="email"
-                            className="form-control"
-                            value={employee.email}
-                            onChange={handleChange}
-                            required
-                        />
-                    </li>
-
-                    <li className="list-group-item">
-                        <label className="form-label">Username:</label>
-                        <input
-                            type="text"
-                            name="username"
-                            className="form-control"
-                            value={employee.username}
-                            onChange={handleChange}
-                        />
-                    </li>
-
-                    <li className="list-group-item">
-                        <label className="form-label">Password:</label>
-                        <input
-                            type="password"
-                            name="password"
-                            className="form-control"
-                            value={employee.password}
-                            onChange={handleChange}
-                        />
-                    </li>
-
-                    <li className="list-group-item">
-                        <label className="form-label">Company Role:</label>
-                        <input
-                            type="text"
-                            name="company_role"
-                            className="form-control"
-                            value={employee.company_role}
-                            onChange={handleChange}
-                        />
-                    </li>
-
-                    <li className="list-group-item">
-                        <label className="form-label">Is Admin:</label>
-                        <div className="form-check">
-                            <input
-                                type="checkbox"
-                                name="is_admin"
-                                className="form-check-input"
-                                id="isAdmin"
-                                checked={employee.is_admin}
-                                onChange={handleChange}
-                            />
-                            <label className="form-check-label" htmlFor="isAdmin">
-                                Is Admin
-                            </label>
-                        </div>
-                    </li>
-
-                    <li className="list-group-item">
-                        <label className="form-label">Hired Date:</label>
-                        <input
-                            type="date"
-                            name="hired_date"
-                            className="form-control"
-                            value={employee.hired_date}
-                            onChange={handleChange}
-                        />
-                    </li>
-
-                    <li className="list-group-item">
-                        <label className="form-label">Manager ID:</label>
-                        <input
-                            type="number"
-                            name="manager_id"
-                            className="form-control"
-                            value={employee.manager_id}
-                            onChange={handleChange}
-                        />
-                    </li>
-
-                    <li className="list-group-item">
-                        <label className="form-label">Department:</label>
-                        <select
-                            name="department_id"
-                            className="form-select"
-                            value={employee.department_id}
-                            onChange={handleChange}
-                        >
-                            <option value="">Select Department</option>
-                            {departments.map((dep) => (
-                                <option key={dep.id} value={dep.id}>
-                                    {dep.name}
-                                </option>
-                            ))}
-                        </select>
-                    </li>
-
-                    <li className="list-group-item">
-                        <label className="form-label">Upload Image:</label>
-                        <input
-                            type="file"
-                            name="image"
-                            className="form-control"
-                            onChange={handleFileChange}
-                        />
-                    </li>
-                    <button type="submit" className="btn btn-primary mt-3">Update Employee</button>
-                </ul>
-
-
-            </form>
+  return (
+    <section className="admin-form-page">
+      <Helmet>
+        <title>Edit User</title>
+      </Helmet>
+      <form className="admin-form-shell" onSubmit={handleSubmit} encType="multipart/form-data">
+        <h1 className="admin-form-title">Edit Employee</h1>
+        <p className="admin-form-subtitle">Update profile details, access role, department assignment, and credentials.</p>
+        <div className="admin-form-grid">
+          <div className="admin-form-field">
+            <label className="admin-form-label">First Name</label>
+            <input type="text" name="firstname" className="admin-form-input" value={employee.firstname} onChange={handleChange} required />
+          </div>
+          <div className="admin-form-field">
+            <label className="admin-form-label">Last Name</label>
+            <input type="text" name="lastname" className="admin-form-input" value={employee.lastname} onChange={handleChange} required />
+          </div>
+          <div className="admin-form-field">
+            <label className="admin-form-label">Email</label>
+            <input type="email" name="email" className="admin-form-input" value={employee.email} onChange={handleChange} required />
+          </div>
+          <div className="admin-form-field">
+            <label className="admin-form-label">Username</label>
+            <input type="text" name="username" className="admin-form-input" value={employee.username} onChange={handleChange} />
+          </div>
+          <div className="admin-form-field">
+            <label className="admin-form-label">Password</label>
+            <input type="password" name="password" className="admin-form-input" value={employee.password} onChange={handleChange} placeholder="Leave blank to keep the current password" />
+          </div>
+          <div className="admin-form-field">
+            <label className="admin-form-label">Company Role</label>
+            <input type="text" name="company_role" className="admin-form-input" value={employee.company_role} onChange={handleChange} />
+          </div>
+          <div className="admin-form-field">
+            <label className="admin-form-label">Access Role</label>
+            <select name="role" className="admin-form-select" value={employee.role} onChange={handleChange}>
+              {ROLE_OPTIONS.map((roleOption) => (
+                <option key={roleOption.value} value={roleOption.value}>
+                  {roleOption.label}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="admin-form-field">
+            <label className="admin-form-label">Hired Date</label>
+            <input type="date" name="hired_date" className="admin-form-input" value={employee.hired_date || ''} onChange={handleChange} />
+          </div>
+          <div className="admin-form-field">
+            <label className="admin-form-label">Manager ID</label>
+            <input type="number" name="manager_id" className="admin-form-input" value={employee.manager_id || ''} onChange={handleChange} />
+          </div>
+          <div className="admin-form-field">
+            <label className="admin-form-label">Department</label>
+            <select name="department_id" className="admin-form-select" value={employee.department_id || ''} onChange={handleChange}>
+              <option value="">Select Department</option>
+              {departments.map((dep) => (
+                <option key={dep.id} value={dep.id}>
+                  {dep.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="admin-form-field full-width">
+            <label className="admin-form-label">Upload Image</label>
+            <input type="file" name="image" className="admin-form-file" onChange={handleFileChange} />
+          </div>
         </div>
-    );
+        <div className="admin-form-actions">
+          <button type="submit" className="btn btn-dark">
+            Update Employee
+          </button>
+        </div>
+        <div className="admin-form-status">
+          {successMessage && <p className="text-success">{successMessage}</p>}
+          {errorMessage && <p className="text-danger">{errorMessage}</p>}
+        </div>
+      </form>
+    </section>
+  );
 };
 
 export default EditUser;

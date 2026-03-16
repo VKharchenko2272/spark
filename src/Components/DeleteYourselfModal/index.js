@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import '../ConfirmationModal/modal.css'
 
 
@@ -19,3 +20,9 @@ function DeleteYourself({ isOpen, onCancel, message }) {
 }
 
 export default DeleteYourself;
+
+DeleteYourself.propTypes = {
+    isOpen: PropTypes.bool.isRequired,
+    onCancel: PropTypes.func.isRequired,
+    message: PropTypes.string.isRequired,
+};

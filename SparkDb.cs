@@ -19,10 +19,13 @@ public class SparkDb : DbContext
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Configure the one-to-many relationship explicitly (optional)
             modelBuilder.Entity<Category>()
                 .HasMany(c => c.topic)
                 .WithOne(t => t.category)
                 .HasForeignKey(t => t.category_id);
+
+            modelBuilder.Entity<User>()
+                .Property(user => user.role)
+                .HasMaxLength(32);
         }
     }

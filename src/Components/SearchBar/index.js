@@ -1,5 +1,5 @@
-// SearchBar.js
 import React from 'react';
+import PropTypes from 'prop-types';
 import './search-style.css';
 function SearchBar({ searchQuery, setSearchQuery }) {
     const handleInputChange = (event) => {
@@ -19,3 +19,8 @@ function SearchBar({ searchQuery, setSearchQuery }) {
 }
 
 export default SearchBar;
+
+SearchBar.propTypes = {
+    searchQuery: PropTypes.string.isRequired,
+    setSearchQuery: PropTypes.func.isRequired,
+};

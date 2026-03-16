@@ -18,7 +18,10 @@ namespace spark.Models
         [ForeignKey("user_id")]
         public User? User { get; set; }
 
-        public ICollection<EvaluationOption> EvaluationOptions { get; set; } = new List<EvaluationOption>();  // One-to-many relationship
+        [ForeignKey("manager_id")]
+        public User? Manager { get; set; }
+
+        public ICollection<EvaluationOption> EvaluationOptions { get; set; } = new List<EvaluationOption>();
         public ICollection<CategoryComment>? CategoryComments { get; set; }
     }
 }

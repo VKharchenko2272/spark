@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -6,12 +7,11 @@ import {
   LinearScale,
   PointElement,
   LineElement,
-  Tooltip,           // For customizing tooltips
-  Filler,            // For filling the area under the line
-  Legend             // For customizing the legend
+  Tooltip,
+  Filler,
+  Legend
 } from "chart.js";
 
-// Register required components for the chart
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -23,8 +23,8 @@ ChartJS.register(
 );
 const createGradient = (ctx, area) => {
   const gradient = ctx.createLinearGradient(0, area.bottom, 0, area.top);
-  gradient.addColorStop(0, "rgba(47,124,250,0.3)"); // Start with a transparent color
-  gradient.addColorStop(1, "rgba(47,124,250,0.7)"); // End with a more opaque color
+  gradient.addColorStop(0, "rgba(47,124,250,0.3)");
+  gradient.addColorStop(1, "rgba(47,124,250,0.7)");
   return gradient;
 };
 
@@ -54,19 +54,16 @@ export default function LineChart({ scores }) {
     21: "Debugging Techniques",
     22: "Tool Selection and Usage"
 };
-  // Gradient background
-  
   const roundToHalf = (num) => {
     return Math.round(num * 2) / 2;
 };
 const roundedScores = scores.map(score => roundToHalf(score));
-  // Data for the chart
   const data = {
     labels: Object.keys(topicNameMap),
     datasets: [
       {
         label: "Points",
-        data: roundedScores,  // Use the scores prop for the data points
+        data: roundedScores,
         fill: true,
         backgroundColor: (context) => {
           const { chart } = context;
@@ -76,63 +73,62 @@ const roundedScores = scores.map(score => roundToHalf(score));
           }
           return createGradient(ctx, chartArea);
         },
-        borderColor: "rgba(47,124,250,1)",  // Line color
-        borderWidth: 2,  // Thickness of the line
-        pointBackgroundColor: "rgba(47,124,250,1)",  // Color of the points
-        tension: 0.4,  // Curve of the line (0 for straight lines)
-        pointRadius: 5,  // Size of the points
+        borderColor: "rgba(47,124,250,1)",
+        borderWidth: 2,
+        pointBackgroundColor: "rgba(47,124,250,1)",
+        tension: 0.4,
+        pointRadius: 5,
       }
     ]
   };
 
-  // Chart options for styling
   const options = {
     scales: {
       y: {
         beginAtZero: true,
-        max: 5,  // Adjust this to match your chart
+        max: 5,
         ticks: {
-          stepSize: 1,  // Interval of the ticks on y-axis
+          stepSize: 1,
           callback: function (value) {
-            return value;  // Display the value directly
+            return value;
           }
         },
         grid: {
-          display: true,  // Show grid lines
-          drawBorder: false,  // Hide the axis line
-          color: "rgba(200,200,200,0.3)",  // Light grid lines
+          display: true,
+          drawBorder: false,
+          color: "rgba(200,200,200,0.3)",
         }
       },
       x: {
         grid: {
-          display: false,  // Hide grid lines for x-axis
+          display: false,
         }
       }
     },
     plugins: {
       tooltip: {
         enabled: true,
-        backgroundColor: "rgba(255,255,255,0.9)",  // Light background for tooltip
-        titleColor: "#333",  // Dark text for tooltip title
-        bodyColor: "#333",  // Dark text for tooltip body
-        borderColor: "rgba(47,124,250,1)",  // Border color around tooltip
-        borderWidth: 1,  // Thickness of the border
+        backgroundColor: "rgba(255,255,255,0.9)",
+        titleColor: "#333",
+        bodyColor: "#333",
+        borderColor: "rgba(47,124,250,1)",
+        borderWidth: 1,
        callbacks: {
           label: function (tooltipItem) {
-            return `Points: ${tooltipItem.raw}`;  // Custom label format
+            return `Points: ${tooltipItem.raw}`;
           },
           title: function (tooltipItems) {
-            const labelIndex = tooltipItems[0].label;  // Get the label index
-            return `Topic: ${topicNameMap[labelIndex]}`;  // Map numeric label to topic name
+            const labelIndex = tooltipItems[0].label;
+            return `Topic: ${topicNameMap[labelIndex]}`;
           }
         }
       },
       legend: {
-        display: false,  // Hide the legend
+        display: false,
       }
     },
-    maintainAspectRatio: false,  // Allows the chart to be responsive
-    responsive: true,  // Make the chart responsive
+    maintainAspectRatio: false,
+    responsive: true,
   };
 
   return (
@@ -141,3 +137,7 @@ const roundedScores = scores.map(score => roundToHalf(score));
     </div>
   );
 }
+
+LineChart.propTypes = {
+  scores: PropTypes.arrayOf(PropTypes.number).isRequired,
+};

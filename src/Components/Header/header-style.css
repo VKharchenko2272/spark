@@ -1,46 +1,71 @@
-header {
-    text-align: center;
-    gap: 1rem
+.main-header {
+    left: 0;
+    right: 0;
+    height: 88px;
+    border-bottom: 1px solid rgba(23, 58, 114, 0.08);
 }
 
-.main-header {
-    height: 100px;
-    padding-top: 10px;
+.header-shell {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 1rem 1.5rem;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+}
+
+.header-left,
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
 .logo-wrapper {
-    /* float: left;
-    margin-left: 10%; */
     align-items: center;
-
 }
 
-.header-logout-element {
-    float: right;
-    margin-right: 7%;
+.header-info {
     display: flex;
     align-items: center;
-}
-
-.header-info{
-    margin-right: 2%;
+    gap: 0.875rem;
 }
 
 .logo-icon {
-    width: 50px;
-}
-.header-info {
-    display: flex;
-    align-items: center; /* Центрируем текст и изображение по вертикали */
+    width: 48px;
 }
 
 .header-info img {
-    margin-right: 30px; /* Отступ между изображением и именем */
-    margin-left: 20px;
+    margin: 0;
 }
 
-.name-block{
+.name-block {
     margin: 0;
-    margin-right: 10%;
-    font-size: 25px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #173a72;
+}
+
+.header-logout-button {
+    min-width: 102px;
+}
+
+.header-spacer {
+    height: 88px;
+}
+
+@media (max-width: 768px) {
+    .header-shell {
+        padding: 0.75rem 1rem;
+    }
+
+    .header-right {
+        gap: 0.75rem;
+    }
+
+    .header-logout-button {
+        min-width: auto;
+    }
 }

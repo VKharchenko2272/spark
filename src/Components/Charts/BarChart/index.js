@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -9,7 +10,6 @@ import {
   Legend
 } from "chart.js";
 
-// Register required components for the chart
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -19,76 +19,72 @@ ChartJS.register(
 );
 
 export default function BarChart({ categories }) {
-  // Category names for the horizontal axis
   const categoryNameMap = {
     1: "Teamwork",
-    2: "Code Aesthetics",
-    3: "Communication",
-    4: "Best Practices",
-    5: "Knowledge Application and Problem Solving"
+    2: "Communication",
+    3: "Knowledge Application and Problem Solving",
+    4: "Code Aesthetics",
+    5: "Best Practices"
   };
 
-  // Extract category names and their total scores
   const labels = categories.map(category => categoryNameMap[category.category_id] || `Category ${category.category_id}`);
   const dataValues = categories.map(category => category.total_score);
 
-  // Data for the chart
   const data = {
-    labels,  // Categories on the horizontal axis
+    labels,
     datasets: [
       {
         label: "Total Score",
-        data: dataValues,  // Use the total scores for the bars
-        backgroundColor: "rgba(47,124,250,0.7)",  // Color of the bars
-        borderColor: "rgba(47,124,250,1)",  // Border color of the bars
-        borderWidth: 1,  // Thickness of the border
+        data: dataValues,
+        backgroundColor: "rgba(47,124,250,0.7)",
+        borderColor: "rgba(47,124,250,1)",
+        borderWidth: 1,
       }
     ]
   };
 
-  // Chart options for styling
   const options = {
     scales: {
       y: {
-        beginAtZero: true,// Set the maximum value for the vertical axis
+        beginAtZero: true,
         ticks: {
-          stepSize: 5,  // Interval of the ticks on y-axis
+          stepSize: 5,
         },
         grid: {
-          display: true,  // Show grid lines
-          drawBorder: false,  // Hide the axis line
-          color: "rgba(200,200,200,0.3)",  // Light grid lines
+          display: true,
+          drawBorder: false,
+          color: "rgba(200,200,200,0.3)",
         }
       },
       x: {
         grid: {
-          display: false,  // Hide grid lines for x-axis
+          display: false,
         }
       }
     },
     plugins: {
       tooltip: {
         enabled: true,
-        backgroundColor: "rgba(255,255,255,0.9)",  // Light background for tooltip
-        titleColor: "#333",  // Dark text for tooltip title
-        bodyColor: "#333",  // Dark text for tooltip body
-        borderColor: "rgba(47,124,250,1)",  // Border color around tooltip
-        borderWidth: 1,  // Thickness of the border
+        backgroundColor: "rgba(255,255,255,0.9)",
+        titleColor: "#333",
+        bodyColor: "#333",
+        borderColor: "rgba(47,124,250,1)",
+        borderWidth: 1,
         callbacks: {
           label: function (tooltipItem) {
-            return `Total Score: ${tooltipItem.raw}`;  // Custom label format
+            return `Total Score: ${tooltipItem.raw}`;
           },
           title: function (tooltipItems) {
-            return `Category: ${tooltipItems[0].label}`;  // Custom title format
+            return `Category: ${tooltipItems[0].label}`;
           }
         }
       },
       legend: {
-        display: false,  // Hide the legend
+        display: false,
       }
     },
-    maintainAspectRatio: false,  // Allows the chart to be responsive
-    responsive: true,  // Make the chart responsive
+    maintainAspectRatio: false,
+    responsive: true,
   };
 
   return (
@@ -97,3 +93,12 @@ export default function BarChart({ categories }) {
     </div>
   );
 }
+
+BarChart.propTypes = {
+  categories: PropTypes.arrayOf(
+    PropTypes.shape({
+      category_id: PropTypes.number.isRequired,
+      total_score: PropTypes.number.isRequired,
+    })
+  ).isRequired,
+};

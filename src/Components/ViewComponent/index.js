@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import './view-style.css';
 import { Helmet } from 'react-helmet-async';
 import return_icon from '../img/return-icon.svg';
-// Используем `sections` для поиска текста по `score`
+import { api } from '../../lib/api';
+
 const sections = [
   {
     id: 1,
@@ -335,7 +335,6 @@ const getCategoryTitleById = (categoryId) => {
 };
 
 const getSubSectionTitle = (topicId) => {
-  // Проходим по разделам и подразделам
   for (const section of sections) {
     const subSection = section.subSections.find(sub => sub.id === topicId);
     if (subSection) {
@@ -356,43 +355,33 @@ const getSubSectionOptions = (topicId) => {
 };
 
 function ViewComponent() {
-
   const navigate = useNavigate();
-
-  const { id } = useParams();  // Получаем ID формы из URL
-  const [evaluationData, setEvaluationData] = useState(null);  // Данные формы
-  const [loading, setLoading] = useState(true);  // Статус загрузки
-  const [error, setError] = useState('');  // Статус ошибки
+  const { id } = useParams();
+  const [evaluationData, setEvaluationData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [person, setPerson] = useState('');
-  const [manager, setManager] = useState('');
 
   useEffect(() => {
-    // Запрос на получение данных формы
-    axios.get(`http://localhost:5212/evaluate/user/${id}`)
-      .then(response => {
-        setEvaluationData(response.data);
+    const loadEvaluation = async () => {
+      try {
+        setLoading(true);
+        const [evaluationResponse, personResponse] = await Promise.all([
+          api.get(`/evaluations/users/${id}`),
+          api.get(`/users/${id}`),
+        ]);
+
+        setEvaluationData(evaluationResponse.data);
+        setPerson(personResponse.data);
+        setError('');
+      } catch (requestError) {
+        setError(requestError?.response?.data?.message || 'Failed to fetch evaluation data');
+      } finally {
         setLoading(false);
-        const managerId = response.data.manager_id;
-        if (managerId) {
-          axios.get(`http://localhost:5212/users/${managerId}`)
-            .then(response => {
-              setManager(response.data);
-            })
-            .catch(error => {
-              console.error("Failed to fetch manager data", error);
-            });
-        }
-      })
-    axios.get(`http://localhost:5212/users/${id}`)
-      .then(response => {
-        setPerson(response.data);
-        setLoading(false);
-      })
-      .catch(error => {
-        setError('Failed to fetch evaluation data');
-        console.error(error);
-        setLoading(false);
-      });
+      }
+    };
+
+    void loadEvaluation();
   }, [id]);
 
   if (loading) {
@@ -414,7 +403,7 @@ function ViewComponent() {
       <Helmet>
         <title>Overview Evaluation</title>
       </Helmet>
-      <h1>This is {person.firstname}'s rubrics</h1>
+      <h1>This is {person.firstname}&apos;s rubrics</h1>
       <div>
         <button className="return-button btn btn-dark" onClick={() => navigate(-1)}>
           <img className="return-button-icon" src={return_icon} alt="Return" />Return
@@ -422,11 +411,14 @@ function ViewComponent() {
       </div>
       <div className="card  mb-3" key={evaluationData.manager_id} style={{ maxWidth: '400px', margin: 'auto' }}>
         <div className="card-header border-bottom-0">
-          <h5 className="card-title mb-0">Manager Information</h5>
+          <h5 className="card-title mb-0">Review Summary</h5>
         </div>
         <div className="card-body">
           <p className="mb-2">
-            <strong>Name:</strong> {manager.firstname} {manager.lastname}
+            <strong>Reviewed by:</strong>{' '}
+            {evaluationData.manager
+              ? `${evaluationData.manager.firstname || ''} ${evaluationData.manager.lastname || ''}`.trim()
+              : 'Manager unavailable'}
           </p>
           <p className="mb-0">
             <strong>Review date:</strong> {new Date(evaluationData.created).toLocaleDateString()}
@@ -445,7 +437,6 @@ function ViewComponent() {
                   <div key={option.id} className="sub-section">
                     <h2 className="h2-evaluatoin-title">{getSubSectionTitle(option.topic.id)}</h2>
 
-                    {/* Отображаем все опции */}
                     <div className="option-wrapper">
                       {getSubSectionOptions(option.topic.id).map(opt => (
                         <div

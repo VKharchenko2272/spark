@@ -9,7 +9,7 @@ namespace spark.Models
     public class Category
     {
         public int id { get; set; }
-        public ICollection<Topic>? topic { get; set; } = new List<Topic>(); // Initialize the collection
+        public ICollection<Topic>? topic { get; set; } = new List<Topic>();
         public ICollection<CategoryComment>? CategoryComments { get; set; }
     }
 }

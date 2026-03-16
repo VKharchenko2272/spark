@@ -1,75 +1,74 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import axios from 'axios';
 import DepMetricsOverview from '../DepMetricsOverview';
 import LineChart from '../Charts/LineChart';
 import BarChart from '../Charts/BarChart';
-import '../Home/Home.css';
 import PageDepDashboard from '../RightPanel/PageDepDashboard';
+import { useAuth } from '../../auth/AuthContext';
+import { api } from '../../lib/api';
+import './dep-metrics-style.css';
 
 function DepMetrics() {
-  const id = localStorage.getItem('userId');
+  const { user } = useAuth();
+  const id = user?.id;
   const [categories, setCategories] = useState([]);
   const [error, setError] = useState('');
   const [managerId, setManagerId] = useState(null);
   const [scores, setScores] = useState(new Array(22).fill(0));
   const [userScoresByTopic, setUserScoresByTopic] = useState({});
-  const [peopleScores, setPeopleScores] = useState([]); // Для хранения данных людей с total score
+  const [peopleScores, setPeopleScores] = useState([]);
+  const missingManagerId = !id;
 
   useEffect(() => {
-    if (!id) {
-      setError('Manager ID is not provided');
+    if (missingManagerId) {
       return;
     }
 
-    // Получение оценок пользователей по темам
-    axios.get(`http://localhost:5212/manager-user-scores/${id}`)
-      .then(response => {
+    api.get('/metrics/users')
+      .then((response) => {
         const userScores = response.data;
         const scoresByTopic = {};
         const peopleScoresData = [];
 
-        userScores.forEach(user => {
+        userScores.forEach((entry) => {
           let totalScore = 0;
 
-          user.topics.forEach(topic => {
+          entry.topics.forEach((topic) => {
             totalScore += topic.score;
 
             if (!scoresByTopic[topic.topicId]) {
               scoresByTopic[topic.topicId] = [];
             }
             scoresByTopic[topic.topicId].push({
-              userName: user.userName,
-              userLastName: user.userLastName,
-              score: topic.score
+              userName: entry.userName,
+              userLastName: entry.userLastName,
+              score: topic.score,
             });
           });
 
-          // Добавляем пользователя и его общий балл в peopleScoresData
           peopleScoresData.push({
-            userId: user.userId,
-            userName: user.userName,
-            totalScore: totalScore
+            userId: entry.userId,
+            userName: entry.userName,
+            totalScore,
           });
         });
 
         setUserScoresByTopic(scoresByTopic);
-        setPeopleScores(peopleScoresData); // Устанавливаем данные людей с total score
+        setPeopleScores(peopleScoresData);
       })
-      .catch(error => {
+      .catch(() => {
         setError('Failed to get manager scores data');
       });
 
-    // Получение данных по категориям
-    axios.get(`http://localhost:5212/department-scores/${id}`)
-      .then(response => {
-        const { categories, managerId } = response.data;
-        setCategories(categories || []);
-        setManagerId(managerId);
+    api.get('/metrics/department')
+      .then((response) => {
+        const { categories: responseCategories, managerId: responseManagerId } = response.data;
+        setCategories(responseCategories || []);
+        setManagerId(responseManagerId);
 
         const extractedScores = new Array(22).fill(0);
-        categories.forEach(category => {
-          category.topics.forEach(topic => {
+        responseCategories.forEach((category) => {
+          category.topics.forEach((topic) => {
             const topicIndex = topic.topic_id - 1;
             extractedScores[topicIndex] = topic.average_score;
           });
@@ -77,35 +76,43 @@ function DepMetrics() {
 
         setScores(extractedScores);
       })
-      .catch(error => {
+      .catch(() => {
         setError('Failed to get manager scores data');
       });
-  }, [id]);
+  }, [id, missingManagerId]);
 
   return (
-    <div className="container">
-      <Helmet> <title>DepMetrics</title></Helmet>
+    <section className="dep-metrics-page">
+      <Helmet>
+        <title>DepMetrics</title>
+      </Helmet>
 
-      <div className="row">
-        {/* Left Section: Main Content */}
-        <div className="col-10 container-width-dashboard">
-          <h1>Team's Dashboard</h1>
+      <div className="dep-metrics-layout">
+        <div className="dep-metrics-main">
+          <h1 className="dep-metrics-title">Team Dashboard</h1>
+          <p className="dep-metrics-subtitle">Department trends, topic averages, and team-level evaluation detail.</p>
           {managerId ? (
             <>
-              <LineChart scores={scores} /> {/* Pass scores as a prop */}
-              <BarChart categories={categories} />
-              <DepMetricsOverview categories={categories} userScoresByTopic={userScoresByTopic} />
+              <div className="dep-metrics-chart-card">
+                <LineChart scores={scores} />
+              </div>
+              <div className="dep-metrics-chart-card">
+                <BarChart categories={categories} />
+              </div>
+              <div className="dep-metrics-overview-card">
+                <DepMetricsOverview categories={categories} userScoresByTopic={userScoresByTopic} />
+              </div>
             </>
           ) : (
             <p>Loading...</p>
           )}
-          {error && <p className="text-danger">{error}</p>}
+          {(missingManagerId || error) && <p className="text-danger">{error || 'Manager ID is not provided'}</p>}
         </div>
-        <div className="col-2 custom-margin">
-          <PageDepDashboard categories={categories} userScoresByTopic={peopleScores} /> {/* Передаем peopleScores */}
-        </div>
+        <aside>
+          <PageDepDashboard categories={categories} userScoresByTopic={peopleScores} />
+        </aside>
       </div>
-    </div>
+    </section>
   );
 }
 

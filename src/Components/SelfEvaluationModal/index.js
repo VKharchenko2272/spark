@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import '../ConfirmationModal/modal.css'
 
 function SelfEvaluation({ message, onClose }) {
@@ -16,3 +17,7 @@ function SelfEvaluation({ message, onClose }) {
 
 export default SelfEvaluation;
 
+SelfEvaluation.propTypes = {
+    message: PropTypes.string.isRequired,
+    onClose: PropTypes.func.isRequired,
+};

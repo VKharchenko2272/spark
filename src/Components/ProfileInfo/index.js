@@ -1,55 +1,46 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import PropTypes from 'prop-types';
 import profile_icon from '../People/img/profile.png';
+import { api, buildApiUrl } from '../../lib/api';
 
 function ProfileInfo({ userId, altText }) {
-  const [profileImageUrl, setProfileImageUrl] = useState(null);
-  const [department, setDepartment] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  const [user, setUser] = useState(null);
   const [error, setError] = useState('');
+  const [useFallbackImage, setUseFallbackImage] = useState(false);
 
   useEffect(() => {
-    if (!userId) return;
+    if (!userId) {
+      return;
+    }
 
-    // Fetch profile image
-    axios.get(`http://localhost:5212/images/${userId}`, { responseType: 'blob' })
-      .then(imageResponse => {
-        const imageUrl = URL.createObjectURL(imageResponse.data);
-        setProfileImageUrl(imageUrl);
+    api.get(`/users/${userId}`)
+      .then((response) => {
+        setUser(response.data);
+        setUseFallbackImage(false);
       })
-      .catch(error => {
-        console.error('Error fetching profile image:', error);
-        setProfileImageUrl(null); // Fall back to null if there's an error
-      });
-
-    // Fetch user details
-    axios.get(`http://localhost:5212/users/${userId}`)
-      .then(response => {
-        if (response.data) {
-          const { firstname, lastname, department } = response.data;
-          setFirstName(firstname);
-          setLastName(lastname);
-          setDepartment(department ? department.name : ''); // Assuming department has a `name` field
-        }
-      })
-      .catch(error => {
+      .catch(() => {
         setError('Failed to fetch user information');
-        console.error(error);
       });
   }, [userId]);
 
+  const imageSrc = !useFallbackImage && user?.img
+    ? buildApiUrl(`/users/${userId}/image`)
+    : profile_icon;
+
   return (
     <div>
-      <img  className='col-auto p-0 img-thumbnail'
-        src={profileImageUrl || profile_icon} // Use fetched image or fallback
+      <img
+        className="col-auto p-0 img-thumbnail"
+        src={imageSrc}
+        alt={altText || `${user?.firstname || ''} ${user?.lastname || ''}`.trim()}
         style={{ width: '100px', height: '100px', borderRadius: '50%' }}
+        onError={() => setUseFallbackImage(true)}
       />
       {error && <p>{error}</p>}
-      {!error && (
+      {user && !error && (
         <div>
-          <p>{firstName} {lastName}</p>
-          <p>Department: {department}</p>
+          <p>{user.firstname} {user.lastname}</p>
+          <p>Department: {user.department?.name || ''}</p>
         </div>
       )}
     </div>
@@ -57,3 +48,8 @@ function ProfileInfo({ userId, altText }) {
 }
 
 export default ProfileInfo;
+
+ProfileInfo.propTypes = {
+  userId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  altText: PropTypes.string,
+};

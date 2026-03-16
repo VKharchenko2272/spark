@@ -1,16 +1,16 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import '../right-panel-style.css';
 import { Link } from 'react-router-dom';
 
 const categoryNameMap = {
     1: "Teamwork",
-    2: "Code Aesthetics",
-    3: "Communication",
-    4: "Best Practices",
-    5: "Knowledge Application and Problem Solving Comments"
+    2: "Communication",
+    3: "Knowledge Application and Problem Solving",
+    4: "Code Aesthetics",
+    5: "Best Practices"
 };
 
-// Function to truncate the category name to 15 characters
 const truncateName = (name, length = 15) => {
     return name.length > length ? name.substring(0, length) + '...' : name;
 };
@@ -24,6 +24,11 @@ function PeopleOverview({ firstname, totalScore }) {
     );
 }
 
+PeopleOverview.propTypes = {
+    firstname: PropTypes.string.isRequired,
+    totalScore: PropTypes.number.isRequired,
+};
+
 function CategoryOverview({ categoryId, totalScore }) {
     const categoryName = truncateName(categoryNameMap[categoryId] || `Category ${categoryId}`);
 
@@ -35,7 +40,11 @@ function CategoryOverview({ categoryId, totalScore }) {
     );
 }
 
-// Функция для случайного выбора 5 элементов из массива
+CategoryOverview.propTypes = {
+    categoryId: PropTypes.number.isRequired,
+    totalScore: PropTypes.number.isRequired,
+};
+
 function getRandomUsers(users, count = 5) {
     const shuffled = [...users].sort(() => 0.5 - Math.random());
     return shuffled.slice(0, count);
@@ -44,7 +53,6 @@ function getRandomUsers(users, count = 5) {
 export default function PageDepDashboard({ categories = [], userScoresByTopic = [] }) {
     const userScoresArray = Array.isArray(userScoresByTopic) ? userScoresByTopic : Object.values(userScoresByTopic);
 
-    // Получаем случайных 5 пользователей
     const randomUsers = getRandomUsers(userScoresArray, 5);
 
     return (
@@ -77,3 +85,26 @@ export default function PageDepDashboard({ categories = [], userScoresByTopic = 
         </div>
     );
 }
+
+PageDepDashboard.propTypes = {
+    categories: PropTypes.arrayOf(
+        PropTypes.shape({
+            category_id: PropTypes.number.isRequired,
+            total_score: PropTypes.number,
+        })
+    ),
+    userScoresByTopic: PropTypes.oneOfType([
+        PropTypes.arrayOf(
+            PropTypes.shape({
+                userName: PropTypes.string.isRequired,
+                totalScore: PropTypes.number,
+            })
+        ),
+        PropTypes.objectOf(
+            PropTypes.shape({
+                userName: PropTypes.string,
+                totalScore: PropTypes.number,
+            })
+        ),
+    ]),
+};
