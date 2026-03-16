@@ -1,70 +1,112 @@
-# Getting Started with Create React App
+# Spark 2.0
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Spark 2.0 is an internal performance review application with:
 
-## Available Scripts
+- ASP.NET Core 8 backend
+- React + Vite frontend
+- MySQL/MariaDB persistence
+- Cookie-based authentication with CSRF protection
 
-In the project directory, you can run:
+## Repository Layout
 
-### `npm start`
+```text
+backend/   ASP.NET Core API, security, data access, and seed SQL
+frontend/  React + Vite client application
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Local Development
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Backend
 
-### `npm test`
+Set the database connection string:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+export SPARKDB_CONNECTION="Server=localhost;Port=3306;Database=sparkdb;User=spark;Password=spark123;"
+```
 
-### `npm run build`
+Run the API:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+cd backend
+dotnet run --launch-profile http
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Backend default URL:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```text
+http://localhost:5212
+```
 
-### `npm run eject`
+### Frontend
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Start the Vite dev server:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+cd frontend
+npm run dev
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Frontend default URL:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```text
+http://localhost:3000
+```
 
-## Learn More
+## Database Bootstrap
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Initialize the schema and seed data:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```bash
+mysql -u spark -p sparkdb < backend/database/init.mysql.sql
+```
 
-### Code Splitting
+Optional extra employee for manual evaluation testing:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```bash
+mysql -u spark -p sparkdb < backend/database/add-test-employee.mysql.sql
+```
 
-### Analyzing the Bundle Size
+Default demo accounts:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- `admin` / `admin123`
+- `manager` / `manager123`
+- `employee` / `employee123`
+- `employee2` / `employee123`
 
-### Making a Progressive Web App
+## Tests
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Frontend:
 
-### Advanced Configuration
+```bash
+cd frontend
+npm test
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Backend:
 
-### Deployment
+```bash
+dotnet test spark.generated.sln
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## Security Checks
 
-### `npm run build` fails to minify
+Run these on a machine with internet access:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```bash
+cd frontend && npm audit
+dotnet list backend/spark.csproj package --vulnerable
+```
+
+Recommended additional checks:
+
+```bash
+cd frontend && npm run lint
+cd frontend && npm run build
+dotnet build spark.generated.sln
+```
+
+## Notes
+
+- Authentication uses cookie sessions plus antiforgery tokens.
+- Role and session invalidation state are stored in the database.
+- Schema bootstrap for legacy databases is handled at startup in `DatabaseBootstrap`.

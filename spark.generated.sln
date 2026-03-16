@@ -3,17 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
-
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "spark", "spark.csproj", "{E677D67B-F19D-4F71-A545-32B39762BA4B}"
-=======
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "spark", "spark.csproj", "{15216872-1E07-468D-A128-D02D4F710AEB}"
->>>>>>> main
-=======
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "spark", "spark.csproj", "{779590B3-B59A-419C-9380-FA2E13F052B3}"
-=======
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "spark", "spark.csproj", "{231E16B9-BE1C-4F1B-9CC0-5E2BE129A2C8}"
->>>>>>> employee-overview
->>>>>>> e53ee35c6c6ce36dd80e26f5ace67ca313ddad2a
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "spark", "backend/spark.csproj", "{742A1D65-EC05-4B39-8A31-E3D8163C57AE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "spark.Tests", "backend/tests/spark.Tests.csproj", "{484FD643-25ED-4342-BE4B-ADB0436066D8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,29 +13,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-
-		{E677D67B-F19D-4F71-A545-32B39762BA4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E677D67B-F19D-4F71-A545-32B39762BA4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E677D67B-F19D-4F71-A545-32B39762BA4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E677D67B-F19D-4F71-A545-32B39762BA4B}.Release|Any CPU.Build.0 = Release|Any CPU
-=======
-		{15216872-1E07-468D-A128-D02D4F710AEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{15216872-1E07-468D-A128-D02D4F710AEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{15216872-1E07-468D-A128-D02D4F710AEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{15216872-1E07-468D-A128-D02D4F710AEB}.Release|Any CPU.Build.0 = Release|Any CPU
->>>>>>> main
-=======
-		{779590B3-B59A-419C-9380-FA2E13F052B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{779590B3-B59A-419C-9380-FA2E13F052B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{779590B3-B59A-419C-9380-FA2E13F052B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{779590B3-B59A-419C-9380-FA2E13F052B3}.Release|Any CPU.Build.0 = Release|Any CPU
-=======
-		{231E16B9-BE1C-4F1B-9CC0-5E2BE129A2C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{231E16B9-BE1C-4F1B-9CC0-5E2BE129A2C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{231E16B9-BE1C-4F1B-9CC0-5E2BE129A2C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{231E16B9-BE1C-4F1B-9CC0-5E2BE129A2C8}.Release|Any CPU.Build.0 = Release|Any CPU
->>>>>>> employee-overview
->>>>>>> e53ee35c6c6ce36dd80e26f5ace67ca313ddad2a
+		{742A1D65-EC05-4B39-8A31-E3D8163C57AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{742A1D65-EC05-4B39-8A31-E3D8163C57AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{742A1D65-EC05-4B39-8A31-E3D8163C57AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{742A1D65-EC05-4B39-8A31-E3D8163C57AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{484FD643-25ED-4342-BE4B-ADB0436066D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{484FD643-25ED-4342-BE4B-ADB0436066D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{484FD643-25ED-4342-BE4B-ADB0436066D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{484FD643-25ED-4342-BE4B-ADB0436066D8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
