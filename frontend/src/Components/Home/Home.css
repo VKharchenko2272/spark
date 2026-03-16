@@ -1,0 +1,44 @@
+/* Home.css */
+
+.home-page .chart {
+    width: 100%; /* Ensure charts take up full width within the column */
+  }
+  
+  .home-page {
+    margin-top: 20px; /* Add some top margin to the container */
+  }
+  
+  .home-page h1 {
+    margin-bottom: 20px; /* Add some space below the title */
+  }
+
+  .custom-margin{
+    margin-top: 5%;
+  }
+
+  .home-page {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+  }
+  
+  .home-main {
+    flex: 0 0 83.3333%;
+    max-width: 83.3333%;
+  }
+  
+  .home-side-panel {
+    flex: 0 0 16.6667%;
+    max-width: 16.6667%;
+  }
+
+  .home-page .data{
+      display: flex;
+      flex-direction: column;
+  }
+  
+  .home-page .no-data img {
+    align-self: center;
+    width: 500px;
+    height: 400px;
+  }
