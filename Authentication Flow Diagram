@@ -1,0 +1,46 @@
+sequenceDiagram
+    participant U as User
+    participant FE as React SPA
+    participant API as ASP.NET Core API
+    participant AF as Antiforgery
+    participant AUTH as AuthService
+    participant DB as MySQL
+
+    U->>FE: Open login page
+    FE->>API: GET /api/auth/csrf
+    API->>AF: Generate antiforgery token
+    AF-->>API: Request token + antiforgery cookie
+    API-->>FE: 204 No Content + XSRF-TOKEN cookie
+
+    U->>FE: Submit username/password
+    FE->>API: POST /api/auth/login + X-CSRF-TOKEN
+    API->>AF: Validate CSRF token
+    AF-->>API: Valid
+    API->>AUTH: AuthenticateAsync(request)
+    AUTH->>DB: Load user by username
+    DB-->>AUTH: User record
+    AUTH->>AUTH: Verify BCrypt password
+    AUTH->>AUTH: Resolve role + auth_version
+    AUTH-->>API: Authenticated user
+    API-->>FE: Set cookie session + return session payload
+
+    FE->>API: GET /api/auth/session
+    API->>DB: Revalidate current user
+    DB-->>API: User + current role/auth_version
+    API-->>FE: SessionResponseDto
+
+    Note over FE,API: All protected API calls now use cookie session
+
+    FE->>API: POST /api/users or /api/evaluations
+    API->>AF: Validate CSRF token
+    API->>API: Validate cookie principal
+    API->>DB: Re-check auth_version and role
+    DB-->>API: Current user state
+    API-->>FE: Authorized response
+
+    Note over API,DB: If role/password changed, auth_version mismatch rejects stale session
+
+    U->>FE: Logout
+    FE->>API: POST /api/auth/logout + X-CSRF-TOKEN
+    API->>AF: Validate CSRF token
+    API-->>FE: Clear session cookie + refresh antiforgery state
